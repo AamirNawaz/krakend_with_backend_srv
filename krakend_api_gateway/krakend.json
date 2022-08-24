@@ -13,6 +13,32 @@
   },
   "endpoints": [
     {
+      "endpoint": "/posts",
+      "method": "GET",
+      "extra_config": {
+              
+        "auth/validator": {
+          "alg": "HS256",
+          "jwk_url": "http://192.168.8.104:4500/symmetric.json",
+          "cache": false,
+          "disable_jwk_security":true,
+          "operation_debug": true
+      }
+      
+      },
+      "concurrent_calls": 2,   
+      "input_headers": ["*"],   
+      "backend": [
+        {
+          "url_pattern": "/api/posts",
+          "method": "GET",        
+          "host": [
+            "http://192.168.8.104:4500"
+          ]
+        }
+      ]
+    },
+       {
       "endpoint": "/validate_token",
       "method": "GET",
       "extra_config": {
@@ -37,9 +63,9 @@
           "debug": false
         },
         
-        "github.com/devopsfaith/krakend-jose/validator": {
+        "auth/validator": {
           "alg": "HS256",
-          "jwk_url": "http://yourbackendhostIpAddress:4500/symmetric.json",
+          "jwk_url": "http://192.168.8.104:4500/symmetric.json",
           "cache": false,
           "disable_jwk_security":true,
           "operation_debug": true
@@ -47,12 +73,13 @@
       
       },
       "concurrent_calls": 2,      
+      "input_headers": ["*"],   
       "backend": [
         {
           "url_pattern": "/api/validate_token",
           "method": "GET",        
           "host": [
-            "http://yourbackendhostIpAddress:4500"
+            "http://192.168.8.104:4500"
           ]
         }
       ]
@@ -85,7 +112,7 @@
           "url_pattern": "/api/login",
           "method": "POST",        
           "host": [
-            "http://yourbackendhostIpAddress:4500"
+            "http://192.168.8.104:4500"
           ]
         }
       ]
@@ -119,7 +146,7 @@
           "url_pattern": "/api/token",
           "method": "POST",        
           "host": [
-            "http://yourbackendhostIpAddress:4500"
+            "http://192.168.8.104:4500"
           ]
         }
       ]

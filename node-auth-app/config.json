@@ -1,0 +1,7 @@
+{
+    "secret": "jwt_secrete",
+    "refreshTokenSecret": "jwt_secrete",
+    "port": 9005,
+    "tokenLife": "30s",
+    "refreshTokenLife": "50s"
+}

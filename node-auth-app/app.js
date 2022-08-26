@@ -4,8 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+require('dotenv').config({path: path.join(__dirname, '..', '.env')});
+
+
 var authRouter = require('./routes/auth');
 var postsRouter = require('./routes/posts');
 
@@ -21,8 +22,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/api', authRouter)
 app.use('/api/posts',postsRouter)
 // catch 404 and forward to error handler

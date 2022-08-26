@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const config = require('../../node-auth-app/config.json')
 
 const AuthChecker = async (req, res, next) => {
     let token = null;
@@ -9,7 +8,7 @@ const AuthChecker = async (req, res, next) => {
             try {
                 
                 token = req.headers.authorization.split(' ')[1];
-                const decoded = jwt.verify(token, config.secret);
+                const decoded = jwt.verify(token, process.env.JWT_SECRETE);
                 req.decoded = decoded;
                 next();
             } catch (error) {

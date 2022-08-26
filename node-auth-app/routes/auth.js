@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const config = require('../config')
 const jwt = require("jsonwebtoken")
 
 
@@ -16,7 +15,7 @@ router.get('/', function(req, res, next) {
 router.post('/login', (req, res) => {
     
     const postData = req.body;
-    
+
     const user = {
         "email": postData.email,
     }
@@ -35,20 +34,15 @@ router.post('/login', (req, res) => {
         })
     }
     
-    
     // Detail of signing token is available on Readme.txt file.
         var signOptions = {
             header: { kid:"sim2"},
-            expiresIn:  "25s"
+            expiresIn:  "5m"
         };
 
-    const access_token = jwt.sign(user, config.secret, signOptions);
+    const access_token = jwt.sign(user, process.env.JWT_SECRETE, signOptions);
    
-        
-    const refreshToken = jwt.sign(user, config.refreshTokenSecret,
-        {
-            header: { kid: "sim2" }, expiresIn:"1d"
-        })
+    const refreshToken = jwt.sign(user, process.env.JWT_REFRESH_TOKEN_SECRETE,{header: { kid: "sim2" }, expiresIn:"1d"})
     
     const response = {
         "exp": Math.floor(Date.now() / 1000) + (60 * 60),
@@ -65,16 +59,13 @@ router.post('/token', (req, res) => {
     console.log(postData)
     // if refresh token exists
     if((postData.refreshToken) && (postData.refreshToken in tokenList)) {
-        const user = {
-            "email": postData.email,
-        }
+        const user = {"email": postData.email}
         var signOptions = {
             header: {alg:"HS256", typ:"JWT", kid:"sim2"},
-            expiresIn:  "25s"
+            expiresIn:  "5m"
         };
 
-    const access_token = jwt.sign(user, config.secret, signOptions);
-            
+    const access_token = jwt.sign(user, process.env.JWT_SECRETE, signOptions);
         const response = {
             "access_token": access_token,
         }

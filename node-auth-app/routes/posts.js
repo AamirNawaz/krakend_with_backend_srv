@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const config = require('../config')
+
 const jwt = require("jsonwebtoken")
 
 const {AuthChecker} = require('../middleware/authMiddleware')

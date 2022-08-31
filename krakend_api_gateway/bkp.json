@@ -1,0 +1,213 @@
+{
+    "$schema": "https://www.krakend.io/schema/v3.json",
+    "version": 3,
+    "name": "RestApiGateway",
+    "timeout": "300000ms",
+    "cache_ttl": "4000s",
+    "port": 8080,
+    "output_encoding": "json",
+    "extra_config": {
+        "router": {
+            "return_error_msg": true
+        }
+    },
+    "endpoints": [
+  
+  
+     
+  
+        {
+            "endpoint": "/login",
+            "method": "POST",
+            "extra_config": {
+                "security/cors": {
+                    "allow_origins": [
+                        "*"
+                    ],
+                    "allow_methods": [
+                        "GET",
+                        "HEAD",
+                        "POST"
+                    ],
+                    "expose_headers": [
+                        "Content-Length",
+                        "Content-Type"
+                    ],
+                    "allow_headers": ["Origin", "Authorization", "Content-Type"],
+                    "max_age": "12h",
+                    "allow_credentials": false,
+                    "debug": false
+                }
+            },
+            "backend": [{
+                "url_pattern": "/api/login",
+                "method": "POST",
+                "host": [
+                    "http://192.168.8.103:4500"
+                ]
+            }]
+        },
+        {
+            "endpoint": "/get_token",
+            "method": "POST",
+            "extra_config": {
+                "security/cors": {
+                    "allow_origins": [
+                        "*"
+                    ],
+                    "allow_methods": [
+                        "GET",
+                        "HEAD",
+                        "POST"
+                    ],
+                    "expose_headers": [
+                        "Content-Length",
+                        "Content-Type"
+                    ],
+                    "allow_headers": ["Content-Type"],
+                    "max_age": "12h",
+                    "allow_credentials": false,
+                    "debug": false
+                }
+  
+            },
+            "backend": [{
+                "url_pattern": "/api/token",
+                "method": "POST",
+                "host": [
+                    "http://192.168.8.103:4500"
+                ]
+            }]
+        },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+        {
+            "endpoint": "/posts",
+            "method": "GET",
+            "extra_config": {
+  
+                "auth/validator": {
+                    "alg": "HS256",
+                    "jwk_url": "http://192.168.8.103:4500/symmetric.json",
+                    "cache": false,
+                    "disable_jwk_security": true,
+                    "operation_debug": true
+                }
+  
+            },
+            "concurrent_calls": 1,
+            "input_headers": ["*"],
+            "backend": [{
+                "url_pattern": "/api/posts",
+                "method": "GET",
+                "host": [
+                    "http://192.168.8.103:4500"
+                ]
+            }]
+        },
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+        {
+            "endpoint": "/validate_token",
+            "method": "GET",
+            "extra_config": {
+                "security/cors": {
+                    "allow_origins": [
+                        "*"
+                    ],
+                    "allow_methods": [
+                        "GET",
+                        "HEAD",
+                        "POST"
+                    ],
+                    "expose_headers": [
+                        "Content-Length",
+                        "Content-Type"
+                    ],
+                    "allow_headers": [
+                        "Accept-Language"
+                    ],
+                    "max_age": "12h",
+                    "allow_credentials": true,
+                    "debug": false
+                },
+  
+                "auth/validator": {
+                    "alg": "HS256",
+                    "jwk_url": "http://192.168.8.103:4500/symmetric.json",
+                    "cache": false,
+                    "disable_jwk_security": true,
+                    "operation_debug": true
+                }
+  
+            },
+            "concurrent_calls": 2,
+            "input_headers": ["*"],
+            "backend": [{
+                "url_pattern": "/api/validate_token",
+                "method": "GET",
+                "host": [
+                    "http://192.168.8.103:4500"
+                ]
+            }]
+        },
+  
+        {
+            "endpoint": "/api/krakend/photos",
+            "method": "GET",
+            "extra_config": {
+  
+                "auth/validator": {
+                    "alg": "HS256",
+                    "@comment": "Comments We can use either this or to access node auth symmetric //http://192.168.8.103:3030/symmetric.json",
+                    "jwk_url": "http://192.168.8.103:4500/symmetric.json",
+                    "cache": false,
+                    "disable_jwk_security": true,
+                    "operation_debug": true
+                }
+            },
+            "concurrent_calls": 1,
+            "input_headers": ["*"],
+            "backend": [{
+                "url_pattern": "/photos",
+                "method": "GET",
+                "host": [
+                    "http://192.168.8.103:3030"
+                ]
+            }]
+        },
+  
+        {
+            "endpoint": "/api/krakend/albums",
+            "method": "GET",
+            "concurrent_calls": 1,
+            "input_headers": ["*"],
+            "backend": [{
+                "url_pattern": "/albums",
+                "method": "GET",
+                "host": [
+                    "http://192.168.8.103:3030"
+                ]
+            }]
+        }
+  
+    ]
+  }

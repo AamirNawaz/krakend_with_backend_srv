@@ -37,7 +37,7 @@ router.post('/login', (req, res) => {
     // Detail of signing token is available on Readme.txt file.
         var signOptions = {
             header: { kid:"sim2"},
-            expiresIn:  "5m"
+            expiresIn:  "30s"
         };
 
     const access_token = jwt.sign(user, process.env.JWT_SECRETE, signOptions);
@@ -62,7 +62,7 @@ router.post('/token', (req, res) => {
         const user = {"email": postData.email}
         var signOptions = {
             header: {alg:"HS256", typ:"JWT", kid:"sim2"},
-            expiresIn:  "5m"
+            expiresIn:  "1m"
         };
 
     const access_token = jwt.sign(user, process.env.JWT_SECRETE, signOptions);

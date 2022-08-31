@@ -1,12 +1,14 @@
 package main
 
 import (
+	"go_srv/routes"
+	"log"
+	"net"
+	"os"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
-	"go_srv/routes"
-	"log"
-	"os"
 )
 
 func init() {
@@ -26,6 +28,14 @@ func main() {
 	app.Use(cors.New())
 	//routing
 	routes.Setup(app)
-	app.Listen("192.168.8.104:" + (os.Getenv("PORT")))
+
+	//Getting host ip
+	host, _ := os.Hostname()
+	addrs, _ := net.LookupIP(host)
+
+	err := app.Listen((addrs[1].String()) + ":" + (os.Getenv("PORT")))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }

@@ -39,3 +39,47 @@ step2:
 
 
 Now access the krakend end point with http://localhost:8080/
+
+
+
+/******************************************************************************/
+/****************** For Login with roles ***********************************/
+/***************************************************************************/
+
+URL :http://localhost:8080/login
+Method: Post
+
+Request Body: Raw > json
+{
+	"email": "aamir@gmail.com",
+	"password": "aamir",
+    "roles":["photographer"]
+}
+
+output:
+
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNpbTIifQ.eyJlbWFpbCI6ImFhbWlyQGdtYWlsLmNvbSIsInJvbGVzIjpbInBob3RvZ3JhcGhlciJdLCJpYXQiOjE2NjIwMTAyNTIsImV4cCI6MTY2MjAxMDMxMn0.HwEhvIhQsnWLN0D_QHCyYKmfSjViZa0E5IJCXSsUPho",
+    "exp": 1662013852,
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InNpbTIifQ.eyJlbWFpbCI6ImFhbWlyQGdtYWlsLmNvbSIsInJvbGVzIjpbInBob3RvZ3JhcGhlciJdLCJpYXQiOjE2NjIwMTAyNTIsImV4cCI6MTY2MjA5NjY1Mn0.cyV1IK9OS_-aLS4iZ36rL6tB4aauEabTBWmeJDuD9LI"
+}
+
+
+If we decode the url in jwt.io site it will gives us the above result for Authorization we must pass role inside payload:
+
+JWT Header: 
+
+{
+  "alg": "HS256",
+  "typ": "JWT",
+  "kid": "sim2"
+}
+JWT Playload:
+{
+  "email": "aamir@gmail.com",
+  "roles": [
+    "photographer"
+  ],
+  "iat": 1662010252,
+  "exp": 1662010312
+}

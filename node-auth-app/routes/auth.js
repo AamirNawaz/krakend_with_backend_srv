@@ -18,26 +18,34 @@ router.post('/login', (req, res) => {
 
     const user = {
         "email": postData.email,
+        "roles":postData.roles
     }
     
     if (postData.email === "" || typeof postData.email ==="undefined") {
         return res.status(400).json({
             "success": false,
-            "message":"Email is required"
+            "message":"Email field is required"
         })
     }
 
     if (postData.password === "" || typeof postData.password ==="undefined") {
         return res.status(400).json({
             "success": false,
-            "message":"Password is required"
+            "message":"Password field is required"
+        })
+    }
+
+    if (Array.isArray(postData.roles) ===false ) {
+        return res.status(400).json({
+            "success": false,
+            "message":"Role field is required"
         })
     }
     
     // Detail of signing token is available on Readme.txt file.
         var signOptions = {
             header: { kid:"sim2"},
-            expiresIn:  "30s"
+            expiresIn:  "1m"
         };
 
     const access_token = jwt.sign(user, process.env.JWT_SECRETE, signOptions);
@@ -56,13 +64,13 @@ router.post('/login', (req, res) => {
 router.post('/token', (req, res) => {
     // refresh the damn token
     const postData = req.body
-    console.log(postData)
+
     // if refresh token exists
     if((postData.refreshToken) && (postData.refreshToken in tokenList)) {
-        const user = {"email": postData.email}
+        const user = {"email": postData.email,"roles":postData.roles}
         var signOptions = {
             header: {alg:"HS256", typ:"JWT", kid:"sim2"},
-            expiresIn:  "1m"
+            expiresIn:  "5m"
         };
 
     const access_token = jwt.sign(user, process.env.JWT_SECRETE, signOptions);

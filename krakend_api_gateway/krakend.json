@@ -133,6 +133,8 @@
               "auth/validator": {
                   "alg": "HS256",
                   "jwk_url": "http://192.168.8.103:4500/symmetric.json",
+                  "roles": ["admin","photographer"],
+                  "roles_key": "roles",
                   "cache": false,
                   "disable_jwk_security": true,
                   "operation_debug": true
